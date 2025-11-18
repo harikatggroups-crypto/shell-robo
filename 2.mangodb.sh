@@ -31,6 +31,8 @@ VALIDATECOMMAND(){ #no space should be between validate command and ()
     fi
 }      
 
+#earlier mangodb manual ga install chesamu kani ipudu script dwara cheddam
+# so automation kosam code rasthey mobexterm dwara direct ga install cheyochu 
 cp mongo.repo /etc/yum.repos.d/mongo.repo  #Copying the mongodb reop file to yum.repos.d
 VALIDATECOMMAND $? "Mongodb repo file copy"
 
@@ -42,3 +44,12 @@ VALIDATECOMMAND $? "Enabling Mongodb service"
 
 systemctl start mongod 
 VALIDATECOMMAND $? "Starting Mongodb service"
+
+# sed means stream editor unlike vim it is not required to edit manually 
+
+sed -i 's/120.0.0.1/0.0.0.0/g' /etc/mongod.conf #changing the bind ip from localhost to all ip address # -i means insert and its permanent change
+                                                # g means change all occurrences in the file # s means substitute                                                 
+VALIDATECOMMAND $? "allowing all remote connections to mongodb"                                               
+
+systemctl restart mongod &>>$LOG_FILE
+VALIDATECOMMAND $? "Restarting Mongodb service"
