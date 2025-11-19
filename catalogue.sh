@@ -42,11 +42,15 @@ VALIDATECOMMAND $? "Enabling Nodejs 20 module"
 
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATECOMMAND $? "Nodejs"
+id roboshop &>>$LOG_FILE
+if [ $? -ne 0 ]; then
+     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+     VALIDATECOMMAND $? "Creating roboshop user"
+else
+        echo -e "$O roboshop user already exists. Skipping user creation. $N" &>>$LOG_FILE
+ fi
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-VALIDATECOMMAND $? "Creating roboshop user"
-
-mkdir /app 
+mkdir -p /app 
 VALIDATECOMMAND $? "Creating /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
