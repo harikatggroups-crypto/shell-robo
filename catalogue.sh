@@ -65,7 +65,7 @@ VALIDATECOMMAND $? "Cleaning up old catalogue content"
 unzip /tmp/catalogue.zip
 VALIDATECOMMAND $? "Extracting catalogue component"
 
-npm install
+npm install &>>$LOG_FILE
 VALIDATECOMMAND $? "Installing nodejs dependencies for catalogue"
 
 cp $SCRIPT_DIR /catalogue.service /etc/systemd/system/catalogue.service 
