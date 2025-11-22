@@ -41,10 +41,15 @@ VALIDATECOMMAND $? "RabbitMQ Server"
 systemctl enable rabbitmq-server &>>$LOG_FILE
 VALIDATECOMMAND $? "Enabling RabbitMQ service"
 systemctl start rabbitmq-server &>>$LOG_FILE
-VALIDATECOMMAND $? "Starting RabbitMQ service"
+VALIDATECOMMAND $? "Starting RabbitMQ service"id roboshop &>>$LOG_FILE
+if [ $? -ne 0 ]; then
+    rabbitmqctl add_user roboshop Rabbit@123 &>>$LOG_FILE
+    VALIDATECOMMAND $? "Adding RabbitMQ user"
+else
+        echo -e "$O roboshop user already exists. Skipping user creation. $N" &>>$LOG_FILE
+ fi
 
-rabbitmqctl add_user roboshop Rabbit@123 &>>$LOG_FILE
-VALIDATECOMMAND $? "Adding RabbitMQ user"
+
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOG_FILE
 
 END_TIME=$(date +%s)
